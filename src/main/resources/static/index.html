@@ -1,0 +1,149 @@
+<!DOCTYPE HTML>
+<html lang="en">
+<head>
+    <title>Warehouse Inventory application</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link rel="stylesheet" type="text/css" href="style.css">
+
+    <style>
+        .button {
+            font: bold 14px Arial;
+            text-decoration: none;
+            background-color: #EEEEEE;
+            color: #333333;
+            padding: 10px;
+            border-top: 1px solid #CCCCCC;
+            border-right: 1px solid #333333;
+            border-bottom: 1px solid #333333;
+            border-left: 1px solid #CCCCCC;
+        }
+    </style>
+</head>
+<body>
+<form action="/add" method="POST">
+    <p>Let's add a product.</p>
+
+    <div>
+        <label for="name">Product name:</label>
+        <input name="name" id="name" value="">
+    </div>
+    <br>
+
+    <div>
+        <label for="code">Product code:</label>
+        <input name="code" id="code" value="FM-HKTV01">
+    </div>
+    <br>
+
+    <div>
+        <label for="weight">Product weight:</label>
+        <input name="weight" id="weight" value=0>
+    </div>
+    <br>
+
+    <div>
+        <label for="location">Location:</label>
+        <input name="location" id="location" value="TKO">
+        <p>(Just enter the initials of the place)</p>
+    </div>
+
+    <div>
+        <button>Add Product</button>
+    </div>
+</form>
+
+<hr>
+
+<!--<div>-->
+<!--    <a href="/list" class="button">List products</a>-->
+<!--</div>-->
+
+<form action="/list" method="GET">
+    <button>List products</button>
+</form>
+
+<br>
+
+<!--<div>-->
+<!--    <a href="/save/product" class="button">Save for Products</a>-->
+<!--</div>-->
+
+<form action="/save/product" method="GET">
+    <button>Save for Products</button>
+</form>
+<br>
+<form action="/save/location" method="GET">
+    <div>
+        <label for="selectName">Product Name:</label>
+        <input name="name" id="selectName" value="">
+    </div>
+
+    <br>
+
+    <div>
+        <label for="selectCode">Product code:</label>
+        <input name="code" id="selectCode" value="FM-HKTV01">
+    </div>
+
+    <br>
+
+    <button>Save for all Location of same product</button>
+</form>
+
+<hr>
+<form action="/find/{code}" method="GET">
+    <label for="selectedCode">Product code:</label>
+    <input list="products" name="code" id="selectedCode" value="FM-HKTV01"/>
+    <br>
+    <table id="products">
+
+    </table>
+    <br>
+    <button onclick="submitForm()">Search for Products</button>
+</form>
+
+<script>
+    async function submitForm() {
+        var search = document.getElementById("selectedCode");
+
+        var table = document.getElementById("products");
+
+        var response = await fetch('/find/'+search.value);
+
+        if (response.ok) {
+            var data = await response.json();   // for res.ok() or res.json()
+            // alert(data.message);
+            // window.location = data.url;
+            var html = '<h2>Products Table</h2>
+                        <tr>
+                            <th>Name</th>
+                            <th>Code</th>
+                            <th>Weight</th>
+                            <th>Location</th>
+                        </tr>';
+
+            data.model.forEach((element) => {
+                html += `<tr>
+                            <th>${element.name}</th>
+                            <th>${element.code}</th>
+                            <th>${element.weight}</th>
+                            <th>${element.location}</th>
+                        </tr>`;
+            });
+
+            table.innerHTML = html;
+        } else if (response.status == 401) {
+            var data = await response.text();   // for res.send()
+            alert(data);
+        } else {
+            alert(response.statusText);
+        }
+    };
+
+
+</script>
+</body>
+
+</html>
+
