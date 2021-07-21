@@ -19,6 +19,7 @@ public class ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    // Form View
     @GetMapping("/form/add")
     public String addForm(){
         String html = "<form action=\"/form/add\" method=\"POST\">" +
@@ -51,13 +52,14 @@ public class ProductService {
         return html;
     }
 
+    // Function for Add Product
     @PostMapping("/form/add")
     public String addProduct(@RequestParam String name, @RequestParam String code, @RequestParam Integer weight, @RequestParam String location) throws IOException {
         Product product = new Product();
         product.setName(name);
         product.setCode(code);
         product.setWeight(weight);
-        product.setLocation(location.toUpperCase());
+        product.setLocation(location.toUpperCase().replaceAll("\\s", ""));
 
         if(chkExistProduct(product)) {
             System.out.println("Update Successfully!");
@@ -72,6 +74,7 @@ public class ProductService {
                 "</form>";
     }
 
+    // Check the Existing Product
     public Boolean chkExistProduct(Product product){
         List<Product> arr;
 
@@ -102,11 +105,13 @@ public class ProductService {
         return false;
     }
 
+    // List out All Products
     @GetMapping("/list")
     public List<Product> findProducts() {
         return productRepository.findAll();
     }
 
+    // Save all the products
     @GetMapping("/save/product")
     public String saveStorageToCSV() {
         System.out.println("Starting....");
@@ -143,6 +148,7 @@ public class ProductService {
                 "</form>";
     }
 
+    // Save all location of same product
     @GetMapping("/save/location")
     public String saveAllLocationOfSameProduct(@RequestParam String code){
         System.out.println("Start...");
@@ -182,11 +188,13 @@ public class ProductService {
                 "</form>";
     }
 
+    // Find the products by Code
     @RequestMapping("/find")
     public List<Product> findProductsByCode(@RequestParam String code) {
         return productRepository.findProductsByCodeOrderByWeight(code);
     }
 
+    // Update the product record
     @RequestMapping("/update")
     public String update(@RequestParam String id, @RequestParam Integer weight, @RequestParam String location) {
         Product old_product = productRepository.findProductById(id);

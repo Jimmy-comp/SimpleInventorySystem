@@ -18,7 +18,7 @@ public class WebsiteApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-
+        // Check Has the Record been created
         if (productRepository.count() == 0) {
             System.out.println("Record Creating...");
             productRepository.save(new Product("face mask", "FM-HKTV01", 100, "tko"));
