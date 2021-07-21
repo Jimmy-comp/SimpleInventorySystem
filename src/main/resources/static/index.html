@@ -4,131 +4,144 @@
     <title>Warehouse Inventory application</title>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <link rel="stylesheet" type="text/css" href="/style.css">
 
-    <style>
-        .button {
-            font: bold 14px Arial;
-            text-decoration: none;
-            background-color: #EEEEEE;
-            color: #333333;
-            padding: 10px;
-            border-top: 1px solid #CCCCCC;
-            border-right: 1px solid #333333;
-            border-bottom: 1px solid #333333;
-            border-left: 1px solid #CCCCCC;
-        }
-    </style>
 </head>
+
 <body>
-<form action="/add" method="POST">
-    <p>Let's add a product.</p>
-
-    <div>
-        <label for="name">Product name:</label>
-        <input name="name" id="name" value="">
-    </div>
-    <br>
-
-    <div>
-        <label for="code">Product code:</label>
-        <input name="code" id="code" value="FM-HKTV01">
-    </div>
-    <br>
-
-    <div>
-        <label for="weight">Product weight:</label>
-        <input name="weight" id="weight" value=0>
-    </div>
-    <br>
-
-    <div>
-        <label for="location">Location:</label>
-        <input name="location" id="location" value="TKO">
-        <p>(Just enter the initials of the place)</p>
-    </div>
-
-    <div>
-        <button>Add Product</button>
-    </div>
-</form>
-
+<h1>Warehouse Inventory System</h1>
 <hr>
 
-<!--<div>-->
-<!--    <a href="/list" class="button">List products</a>-->
-<!--</div>-->
+<div class="container">
+    <div class="item">
+        <form action="/list" method="GET">
+            <div>
+                <button type="button" onclick="getAllProducts()">List products</button>
+            </div>
+            <br>
+<!--            <div>-->
+<!--                <table id="allProducts">-->
 
-<form action="/list" method="GET">
-    <button>List products</button>
-</form>
+<!--                </table>-->
+<!--            </div>-->
+        </form>
 
-<br>
+        <hr>
 
-<!--<div>-->
-<!--    <a href="/save/product" class="button">Save for Products</a>-->
-<!--</div>-->
+        <form action="/find" method="GET">
+            <div>
+                <label for="selectedCode">Product code:</label>
+                <input name="code" id="selectedCode" value="FM-HKTV01"/>
+            </div>
 
-<form action="/save/product" method="GET">
-    <button>Save for Products</button>
-</form>
-<br>
-<form action="/save/location" method="GET">
-    <div>
-        <label for="selectName">Product Name:</label>
-        <input name="name" id="selectName" value="">
+            <br>
+
+            <div>
+                <button type="button" onclick="findProductsByCode()">Search for Products</button>
+            </div>
+
+            <br>
+
+<!--            <div>-->
+<!--                <table id="products">-->
+
+<!--                </table>-->
+<!--            </div>-->
+        </form>
+
+        <hr>
+
+        <form action="/form/add">
+            <p>Let's add a product.</p>
+            <button>Add Product</button>
+        </form>
+
+        <hr>
+
+        <form action="/save/location" method="GET">
+            <div>
+                <label for="selectCode">Product code:</label>
+                <input name="code" id="selectCode" value="FM-HKTV01">
+            </div>
+
+            <br>
+
+            <button>Save for all Location of same product</button>
+        </form>
+
+        <br>
+
+        <form action="/save/product" method="GET">
+            <button>Save for All Products</button>
+        </form>
+
     </div>
+    <div class="item">
+        <table style="width: 100%">
+            <thead>
+            <tr>
+                <th colspan="5">
+                    <h2>Product Table</h2>
+                </th>
+            </tr>
 
-    <br>
+            <tr class="keys_val">
+                <th>Name</th>
+                <th>Code</th>
+                <th>Weight</th>
+                <th>Location</th>
+            </tr>
+            </thead>
+            <tbody id="allProducts">
 
-    <div>
-        <label for="selectCode">Product code:</label>
-        <input name="code" id="selectCode" value="FM-HKTV01">
+            </tbody>
+        </table>
+        <br>
+
+        <form id="form" method="POST" style="display: none" action="/update">
+            <div id="info_text">
+
+            </div>
+            <label for="selectedItem">Quantity:</label>
+            <input type="hidden" name="id" id="selectedItemId">
+            <input name="weight" id="selectedItem" type="number" value="1" max="" min="1"/>
+
+            <label for="selectedItemLocation">Location</label>
+            <select id="selectedItemLocation" name="location">
+                <option value="CWB">CWB</option>
+                <option value="KT">KT</option>
+                <option value="TKO">TKO</option>
+                <option value="TST">TST</option>
+            </select>
+
+            <button>Move</button>
+        </form>
     </div>
+</div>
 
-    <br>
 
-    <button>Save for all Location of same product</button>
-</form>
-
-<hr>
-<form action="/find/{code}" method="GET">
-    <label for="selectedCode">Product code:</label>
-    <input list="products" name="code" id="selectedCode" value="FM-HKTV01"/>
-    <br>
-    <table id="products">
-
-    </table>
-    <br>
-    <button onclick="submitForm()">Search for Products</button>
-</form>
 
 <script>
-    async function submitForm() {
+    async function findProductsByCode() {
         var search = document.getElementById("selectedCode");
 
-        var table = document.getElementById("products");
+        var table = document.getElementById("allProducts");
 
-        var response = await fetch('/find/'+search.value);
+        var response = await fetch('/find?code='+search.value);
 
         if (response.ok) {
             var data = await response.json();   // for res.ok() or res.json()
             // alert(data.message);
             // window.location = data.url;
-            var html = '<h2>Products Table</h2>
-                        <tr>
-                            <th>Name</th>
-                            <th>Code</th>
-                            <th>Weight</th>
-                            <th>Location</th>
-                        </tr>';
+            var html = '';
 
-            data.model.forEach((element) => {
+            data.forEach((element) => {
                 html += `<tr>
-                            <th>${element.name}</th>
-                            <th>${element.code}</th>
-                            <th>${element.weight}</th>
-                            <th>${element.location}</th>
+                            <td>${element.name}</td>
+                            <td>${element.code}</td>
+                            <td>${element.weight}</td>
+                            <td>${element.location}</td>
+                            <td><button onclick="showForm('${element.id}', ${element.weight}, '${element.location}')" type="button">Move</button></td>
                         </tr>`;
             });
 
@@ -141,7 +154,54 @@
         }
     };
 
+    async function getAllProducts() {
+        var table = document.getElementById("allProducts");
 
+        var response = await fetch('/list');
+
+        if (response.ok) {
+            var data = await response.json();   // for res.ok() or res.json()
+            // alert(data.message);
+            // window.location = data.url;
+            var html = '';
+
+            data.forEach((element) => {
+                html += `<tr>
+                            <td>${element.name}</td>
+                            <td>${element.code}</td>
+                            <td>${element.weight}</td>
+                            <td>${element.location}</td>
+                            <td><button onclick="showForm('${element.id}', ${element.weight}, '${element.location}')" type="button">Move</button></td>
+                        </tr>`;
+            });
+
+            table.innerHTML = html;
+        } else if (response.status == 401) {
+            var data = await response.text();   // for res.send()
+            alert(data);
+        } else {
+            alert(response.statusText);
+        }
+    };
+
+    async function showForm(id, weight, location) {
+
+        Array.from(document.querySelectorAll(`#form option`)).forEach(o => o.removeAttribute('disabled'));
+        document.querySelector(`#form option[value="${location}"]`).setAttribute('disabled','disabled');
+
+        var form = document.getElementById("form");
+
+        form.style = "display: block";
+
+        var input = document.getElementById('selectedItem');
+        input.setAttribute('max', weight);
+
+        var inputId = document.getElementById('selectedItemId');
+        inputId.value = id;
+
+        var text = document.getElementById('info_text');
+        text.innerHTML = `<p>From ${location}: </p>`;
+    };
 </script>
 </body>
 
