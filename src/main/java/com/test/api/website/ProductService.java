@@ -10,10 +10,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
+
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 @RestController
@@ -119,7 +117,7 @@ public class ProductService {
         File file = new File("/Users/Jimmy/Desktop/output.csv");
 
         // Header column value
-        String[] header = { "ID", "Name", "Code", "Weight", "Location" };
+        String[] header = { "ID", "Name", "Code", "Quantity", "Location" };
 
         list.add(header);
 
@@ -155,7 +153,7 @@ public class ProductService {
         File file = new File("/Users/Jimmy/Desktop/output_location.csv");
 
         // Header column value
-        String[] header = { "ID", "Name", "Code", "Weight", "Location" };
+        String[] header = { "ID", "Name", "Code", "Quantity", "Location" };
 
         list.add(header);
 

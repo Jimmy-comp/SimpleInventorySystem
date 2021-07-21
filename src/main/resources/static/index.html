@@ -41,12 +41,6 @@
             </div>
 
             <br>
-
-<!--            <div>-->
-<!--                <table id="products">-->
-
-<!--                </table>-->
-<!--            </div>-->
         </form>
 
         <hr>
@@ -116,6 +110,10 @@
 
             <button>Move</button>
         </form>
+
+        <div id="count">
+
+        </div>
     </div>
 </div>
 
@@ -124,6 +122,8 @@
 <script>
     async function findProductsByCode() {
         var search = document.getElementById("selectedCode");
+
+        var total_c = document.getElementById("count");
 
         var table = document.getElementById("allProducts");
 
@@ -135,7 +135,10 @@
             // window.location = data.url;
             var html = '';
 
+            var count = 0;
+
             data.forEach((element) => {
+                count += element.weight ;
                 html += `<tr>
                             <td>${element.name}</td>
                             <td>${element.code}</td>
@@ -146,6 +149,7 @@
             });
 
             table.innerHTML = html;
+            total_c.innerHTML = `<p>Total Count is ${count}</p>`;
         } else if (response.status == 401) {
             var data = await response.text();   // for res.send()
             alert(data);
@@ -166,6 +170,7 @@
             var html = '';
 
             data.forEach((element) => {
+                count += element.weight ;
                 html += `<tr>
                             <td>${element.name}</td>
                             <td>${element.code}</td>

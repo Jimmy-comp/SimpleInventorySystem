@@ -3,10 +3,8 @@ package com.test.api.website;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-//@EnableAutoConfiguration
 @SpringBootApplication
 public class WebsiteApplication implements CommandLineRunner {
     private final static String newline = "\n";
@@ -15,8 +13,6 @@ public class WebsiteApplication implements CommandLineRunner {
     private ProductRepository productRepository;
 
     public static void main(String[] args) {
-        // Replace the uri string with your MongoDB deployment's connection string
-
         SpringApplication.run(WebsiteApplication.class, args);
     }
 
