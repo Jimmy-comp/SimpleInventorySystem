@@ -46,7 +46,8 @@ The results will be shown in the table on the right.
 You can transfer products by clicking the `Move` button.\
 A form will pop up below the table,\
 Input the transfer quantities and destination,\
-The records will changed after clicking the `Move` button.
+The records will changed after clicking the `Move` button.\
+(Please change or add the location in the `<option>` tag manually)
 
 ### Add Inventory
 
